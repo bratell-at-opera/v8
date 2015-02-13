@@ -93,7 +93,7 @@ void StatisticsExtension::GetCounters(
 #undef ADD_COUNTER
   };  // End counter_list array.
 
-  for (int i = 0; i < arraysize(counter_list); i++) {
+  for (size_t i = 0; i < arraysize(counter_list); i++) {
     AddCounter(args.GetIsolate(), result, counter_list[i].counter,
                counter_list[i].name);
   }
@@ -133,7 +133,7 @@ void StatisticsExtension::GetCounters(
       {heap->lo_space()->CommittedMemory(), "lo_space_commited_bytes"},
   };
 
-  for (int i = 0; i < arraysize(numbers); i++) {
+  for (size_t i = 0; i < arraysize(numbers); i++) {
     AddNumber(args.GetIsolate(), result, numbers[i].number, numbers[i].name);
   }
 
