@@ -99,7 +99,7 @@ void StatisticsExtension::GetCounters(
   }
 
   struct StatisticNumber {
-    int number;
+    intptr_t number;
     const char* name;
   };
 
