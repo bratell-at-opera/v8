@@ -239,7 +239,7 @@ ANDROID_ARCHES = android_ia32 android_x64 android_arm android_arm64 \
 NACL_ARCHES = nacl_ia32 nacl_x64
 
 # List of files that trigger Makefile regeneration:
-GYPFILES = third_party/icu/icu.gypi third_party/icu/icu.gyp \
+GYPFILES = third_party/icu/icu.gypi third_party/icu/icu.gyp third_party/icu/icu_data.gyp third_party/icu/icu_data.gypi third_party/icu/icu_tools.gyp third_party/icu/icu_tools.gypi \
 	   build/shim_headers.gypi build/features.gypi build/standalone.gypi \
 	   build/toolchain.gypi build/all.gyp build/mac/asan.gyp \
 	   build/android.gypi test/cctest/cctest.gyp \
