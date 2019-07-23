@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 #include "src/objects/backing-store.h"
+#include "src/common/globals.h"
 #include "src/execution/isolate.h"
 #include "src/handles/global-handles.h"
 #include "src/logging/counters.h"
@@ -32,7 +33,6 @@ constexpr size_t kAddressSpaceLimit = 0x10100000000L;  // 1 TiB + 4 GiB
 constexpr size_t kAddressSpaceLimit = 0xC0000000;  // 3 GiB
 #endif
 
-constexpr uint64_t GB = 1024 * 1024 * 1024;
 constexpr uint64_t kNegativeGuardSize = 2 * GB;
 constexpr uint64_t kFullGuardSize = 10 * GB;
 
