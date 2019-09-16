@@ -470,10 +470,10 @@ Handle<JSObject> InnerAddElement(Isolate* isolate, Handle<JSArray> array,
   Factory* factory = isolate->factory();
   Handle<JSObject> element = factory->NewJSObject(isolate->object_function());
   JSObject::AddProperty(isolate, element, factory->type_string(),
-                        field_type_string, NONE);
+                        field_type_string, PA_NONE;
 
-  JSObject::AddProperty(isolate, element, factory->value_string(), value, NONE);
-  JSObject::AddDataElement(array, index, element, NONE);
+  JSObject::AddProperty(isolate, element, factory->value_string(), value, PA_NONE;
+  JSObject::AddDataElement(array, index, element, PA_NONE;
   return element;
 }
 
@@ -496,7 +496,7 @@ void Intl::AddElement(Isolate* isolate, Handle<JSArray> array, int index,
   Handle<JSObject> element =
       InnerAddElement(isolate, array, index, field_type_string, value);
   JSObject::AddProperty(isolate, element, additional_property_name,
-                        additional_property_value, NONE);
+                        additional_property_value, PA_NONE;
 }
 
 namespace {
@@ -1534,7 +1534,7 @@ MaybeHandle<JSObject> SupportedLocales(
   }
 
   // 5. Return CreateArrayFromList(supportedLocales).
-  PropertyAttributes attr = static_cast<PropertyAttributes>(NONE);
+  PropertyAttributes attr = static_cast<PropertyAttributes>(PA_NONE;
   return CreateArrayFromList(isolate, supported_locales, attr);
 }
 
@@ -1549,7 +1549,7 @@ MaybeHandle<JSArray> Intl::GetCanonicalLocales(Isolate* isolate,
   MAYBE_RETURN(maybe_ll, MaybeHandle<JSArray>());
 
   // 2. Return CreateArrayFromList(ll).
-  PropertyAttributes attr = static_cast<PropertyAttributes>(NONE);
+  PropertyAttributes attr = static_cast<PropertyAttributes>(PA_NONE;
   return CreateArrayFromList(isolate, maybe_ll.FromJust(), attr);
 }
 

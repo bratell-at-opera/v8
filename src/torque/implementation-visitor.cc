@@ -58,9 +58,9 @@ void ImplementationVisitor::BeginCSAFiles() {
       source << "#include " << StringLiteralQuote(include_path) << "\n";
     }
 
-    for (SourceId file : SourceFileMap::AllSources()) {
+    for (SourceId inner_file : SourceFileMap::AllSources()) {
       source << "#include \"torque-generated/" +
-                    SourceFileMap::PathFromV8RootWithoutExtension(file) +
+                    SourceFileMap::PathFromV8RootWithoutExtension(inner_file) +
                     "-tq-csa.h\"\n";
     }
     source << "\n";
@@ -194,10 +194,10 @@ VisitResult ImplementationVisitor::InlineMacro(
   }
 
   DCHECK_EQ(label_blocks.size(), signature.labels.size());
-  for (size_t i = 0; i < signature.labels.size(); ++i) {
-    const LabelDeclaration& label_info = signature.labels[i];
+  for (size_t j = 0; j < signature.labels.size(); ++j) {
+    const LabelDeclaration& label_info = signature.labels[j];
     label_bindings.Add(label_info.name,
-                       LocalLabel{label_blocks[i], label_info.types});
+                       LocalLabel{label_blocks[j], label_info.types});
   }
 
   Block* macro_end;
@@ -215,9 +215,9 @@ VisitResult ImplementationVisitor::InlineMacro(
     // doesn't correspond to any real return values, and thus shouldn't contain
     // top types, because these would pollute actual return value types that get
     // unioned with them for return statements, erroneously forcing them to top.
-    for (auto i = stack.begin(); i != stack.end(); ++i) {
-      if ((*i)->IsTopType()) {
-        *i = TopType::cast(*i)->source_type();
+    for (auto j = stack.begin(); j != stack.end(); ++j) {
+      if ((*j)->IsTopType()) {
+        *j = TopType::cast(*j)->source_type();
       }
     }
     macro_end = assembler().NewBlock(std::move(stack));
@@ -343,9 +343,9 @@ void ImplementationVisitor::VisitMacroCommon(Macro* macro) {
     const LabelDeclaration& label_info = signature.labels[i];
     assembler().Bind(label_block);
     std::vector<std::string> label_parameter_variables;
-    for (size_t i = 0; i < label_info.types.size(); ++i) {
-      LowerLabelParameter(label_info.types[i],
-                          ExternalLabelParameterName(label_info.name->value, i),
+    for (size_t j = 0; j < label_info.types.size(); ++j) {
+      LowerLabelParameter(label_info.types[j],
+                          ExternalLabelParameterName(label_info.name->value, j),
                           &label_parameter_variables);
     }
     assembler().Emit(GotoExternalInstruction{
@@ -588,12 +588,12 @@ const Type* ImplementationVisitor::Visit(
       ReportError("constexpr variables need an initializer");
     }
     TypeVector lowered_types = LowerType(*type);
-    for (const Type* type : lowered_types) {
+    for (const Type* inner_type : lowered_types) {
       assembler().Emit(PushUninitializedInstruction{TypeOracle::GetTopType(
           "uninitialized variable '" + stmt->name->value + "' of type " +
-              type->ToString() + " originally defined at " +
+              inner_type->ToString() + " originally defined at " +
               PositionAsString(stmt->pos),
-          type)});
+          inner_type)});
     }
     init_result =
         VisitResult(*type, assembler().TopRange(lowered_types.size()));
@@ -1042,8 +1042,8 @@ const Type* ImplementationVisitor::Visit(AssertStatement* stmt) {
         }
         // TODO(szuend): In case the call expression resolves to a macro
         //               callable, mark the macro as used as well.
-      } else if (auto call = CallMethodExpression::DynamicCast(expression)) {
-        for (Identifier* label : call->labels) {
+      } else if (auto inner_call = CallMethodExpression::DynamicCast(expression)) {
+        for (Identifier* label : inner_call->labels) {
           LabelBindingsManager::Get().TryLookup(label->value);
         }
         // TODO(szuend): Mark the underlying macro as used.
@@ -1566,10 +1566,10 @@ void FailCallableLookup(const std::string& reason, const QualifiedName& name,
     stream << "\nfailed to instantiate all of these generic declarations:";
     for (auto& failure : inapplicable_generics) {
       Generic* generic;
-      const char* reason;
-      std::tie(generic, reason) = failure;
+      const char* inner_reason;
+      std::tie(generic, inner_reason) = failure;
       stream << "\n  " << generic->name() << " defined at "
-             << generic->Position() << ":\n    " << reason << "\n";
+             << generic->Position() << ":\n    " << inner_reason << "\n";
     }
   }
   ReportError(stream.str());
@@ -3665,12 +3665,12 @@ void ImplementationVisitor::GenerateCSATypes(
       }
       h_contents << "\n  std::tuple<";
       bool first = true;
-      for (const Type* type : LowerType(struct_type)) {
+      for (const Type* inner_type : LowerType(struct_type)) {
         if (!first) {
           h_contents << ", ";
         }
         first = false;
-        h_contents << type->GetGeneratedTypeName();
+        h_contents << inner_type->GetGeneratedTypeName();
       }
       h_contents << "> Flatten() const {\n"
                  << "    return std::tuple_cat(";

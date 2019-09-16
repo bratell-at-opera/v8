@@ -119,9 +119,9 @@ Handle<JSObject> JSV8BreakIterator::ResolvedOptions(
   Handle<String> locale(break_iterator->locale(), isolate);
 
   JSObject::AddProperty(isolate, result, factory->locale_string(), locale,
-                        NONE);
+                        PA_NONE;
   JSObject::AddProperty(isolate, result, factory->type_string(),
-                        break_iterator->TypeAsString(), NONE);
+                        break_iterator->TypeAsString(), PA_NONE;
   return result;
 }
 

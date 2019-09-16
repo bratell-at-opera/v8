@@ -214,11 +214,11 @@ Handle<JSObject> JSListFormat::ResolvedOptions(Isolate* isolate,
   //  [[Style]]        "style"
   Handle<String> locale(format->locale(), isolate);
   JSObject::AddProperty(isolate, result, factory->locale_string(), locale,
-                        NONE);
+                        PA_NONE;
   JSObject::AddProperty(isolate, result, factory->type_string(),
-                        format->TypeAsString(), NONE);
+                        format->TypeAsString(), PA_NONE;
   JSObject::AddProperty(isolate, result, factory->style_string(),
-                        format->StyleAsString(), NONE);
+                        format->StyleAsString(), PA_NONE;
   // 6. Return options.
   return result;
 }

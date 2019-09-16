@@ -3581,7 +3581,7 @@ Maybe<bool> JSObject::CreateDataProperty(LookupIterator* it,
   }
 
   RETURN_ON_EXCEPTION_VALUE(it->isolate(),
-                            DefineOwnPropertyIgnoreAttributes(it, value, NONE),
+                            DefineOwnPropertyIgnoreAttributes(it, value, PA_NONE,
                             Nothing<bool>());
 
   return Just(true);
@@ -3655,7 +3655,7 @@ bool TestElementsIntegrityLevel(JSObject object, PropertyAttributes level) {
   }
   if (IsFrozenElementsKind(kind)) return true;
   if (IsSealedElementsKind(kind) && level != FROZEN) return true;
-  if (IsNonextensibleElementsKind(kind) && level == NONE) return true;
+  if (IsNonextensibleElementsKind(kind) && level == PA_NONE return true;
 
   ElementsAccessor* accessor = ElementsAccessor::ForKind(kind);
   // Only DICTIONARY_ELEMENTS and SLOW_SLOPPY_ARGUMENTS_ELEMENTS have
@@ -3800,7 +3800,7 @@ Maybe<bool> JSObject::PreventExtensionsWithTransition(
   // Sealing/freezing sloppy arguments or namespace objects should be handled
   // elsewhere.
   DCHECK(!object->HasSloppyArgumentsElements());
-  DCHECK_IMPLIES(object->IsJSModuleNamespace(), attrs == NONE);
+  DCHECK_IMPLIES(object->IsJSModuleNamespace(), attrs == PA_NONE;
 
   Isolate* isolate = object->GetIsolate();
   if (object->IsAccessCheckNeeded() &&
@@ -3847,7 +3847,7 @@ Maybe<bool> JSObject::PreventExtensionsWithTransition(
   }
 
   Handle<Symbol> transition_marker;
-  if (attrs == NONE) {
+  if (attrs == PA_NONE {
     transition_marker = isolate->factory()->nonextensible_symbol();
   } else if (attrs == SEALED) {
     transition_marker = isolate->factory()->sealed_symbol();
@@ -3924,7 +3924,7 @@ Maybe<bool> JSObject::PreventExtensionsWithTransition(
     }
     JSObject::MigrateToMap(isolate, object, new_map);
 
-    if (attrs != NONE) {
+    if (attrs != PA_NONE {
       ReadOnlyRoots roots(isolate);
       if (object->IsJSGlobalObject()) {
         Handle<GlobalDictionary> dictionary(
@@ -3967,7 +3967,7 @@ Maybe<bool> JSObject::PreventExtensionsWithTransition(
     Handle<NumberDictionary> dictionary(object->element_dictionary(), isolate);
     // Make sure we never go back to the fast case
     object->RequireSlowElements(*dictionary);
-    if (attrs != NONE) {
+    if (attrs != PA_NONE {
       JSObject::ApplyAttributesToDictionary(isolate, ReadOnlyRoots(isolate),
                                             dictionary, attrs);
     }
@@ -4638,7 +4638,7 @@ void JSObject::AddDataElement(Handle<JSObject> object, uint32_t index,
     dictionary_kind = SLOW_STRING_WRAPPER_ELEMENTS;
   }
 
-  if (attributes != NONE) {
+  if (attributes != PA_NONE {
     kind = dictionary_kind;
   } else if (elements.IsNumberDictionary(isolate)) {
     kind = ShouldConvertToFastElements(

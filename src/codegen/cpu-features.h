@@ -25,7 +25,7 @@ enum CpuFeature {
   BMI2,
   LZCNT,
   POPCNT,
-  ATOM,
+  CPU_ATOM,
   // ARM
   // - Standard configurations. The baseline is ARMv6+VFPv2.
   ARMv7,        // ARMv7-A + VFPv3-D32 + NEON

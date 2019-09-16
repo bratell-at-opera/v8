@@ -2187,7 +2187,7 @@ Maybe<uint32_t> ValueDeserializer::ReadJSObjectProperties(
       LookupIterator it = LookupIterator::PropertyOrElement(
           isolate_, object, key, &success, LookupIterator::OWN);
       if (!success || it.state() != LookupIterator::NOT_FOUND ||
-          JSObject::DefineOwnPropertyIgnoreAttributes(&it, value, NONE)
+          JSObject::DefineOwnPropertyIgnoreAttributes(&it, value, PA_NONE
               .is_null()) {
         return Nothing<uint32_t>();
       }
@@ -2221,7 +2221,7 @@ Maybe<uint32_t> ValueDeserializer::ReadJSObjectProperties(
     LookupIterator it = LookupIterator::PropertyOrElement(
         isolate_, object, key, &success, LookupIterator::OWN);
     if (!success || it.state() != LookupIterator::NOT_FOUND ||
-        JSObject::DefineOwnPropertyIgnoreAttributes(&it, value, NONE)
+        JSObject::DefineOwnPropertyIgnoreAttributes(&it, value, PA_NONE
             .is_null()) {
       return Nothing<uint32_t>();
     }
@@ -2268,7 +2268,7 @@ static Maybe<bool> SetPropertiesFromKeyValuePairs(Isolate* isolate,
     LookupIterator it = LookupIterator::PropertyOrElement(
         isolate, object, key, &success, LookupIterator::OWN);
     if (!success || it.state() != LookupIterator::NOT_FOUND ||
-        JSObject::DefineOwnPropertyIgnoreAttributes(&it, value, NONE)
+        JSObject::DefineOwnPropertyIgnoreAttributes(&it, value, PA_NONE
             .is_null()) {
       return Nothing<bool>();
     }

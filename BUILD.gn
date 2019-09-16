@@ -682,6 +682,8 @@ config("toolchain") {
   if (is_clang) {
     cflags += [ "-Wmissing-field-initializers" ]
 
+    cflags += [ "-Wshadow-uncaptured-local", "-Wshadow" ]
+
     if (v8_current_cpu != "mips" && v8_current_cpu != "mipsel") {
       # We exclude MIPS because the IsMipsArchVariant macro causes trouble.
       cflags += [ "-Wunreachable-code" ]

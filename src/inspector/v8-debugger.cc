@@ -687,8 +687,8 @@ v8::MaybeLocal<v8::Array> V8Debugger::collectionsEntries(
   for (uint32_t i = 0; i < entries->Length(); i += isKeyValue ? 2 : 1) {
     v8::Local<v8::Value> item;
     if (!entries->Get(context, i).ToLocal(&item)) continue;
-    v8::Local<v8::Value> value;
-    if (isKeyValue && !entries->Get(context, i + 1).ToLocal(&value)) continue;
+    v8::Local<v8::Value> inner_value;
+    if (isKeyValue && !entries->Get(context, i + 1).ToLocal(&inner_value)) continue;
     v8::Local<v8::Object> wrapper = v8::Object::New(isolate);
     if (!wrapper->SetPrototype(context, v8::Null(isolate)).FromMaybe(false))
       continue;
@@ -697,7 +697,7 @@ v8::MaybeLocal<v8::Array> V8Debugger::collectionsEntries(
         toV8StringInternalized(isolate, isKeyValue ? "key" : "value"), item);
     if (isKeyValue) {
       createDataProperty(context, wrapper,
-                         toV8StringInternalized(isolate, "value"), value);
+                         toV8StringInternalized(isolate, "value"), inner_value);
     }
     if (!addInternalObject(context, wrapper, V8InternalValueType::kEntry))
       continue;

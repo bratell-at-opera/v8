@@ -296,9 +296,9 @@ Handle<String> TransitionsAccessor::ExpectedTransitionKey() {
     case kWeakRef: {
       Map target = Map::cast(raw_transitions_->GetHeapObjectAssumeWeak());
       PropertyDetails details = GetSimpleTargetDetails(target);
-      if (details.location() != kField) return Handle<String>::null();
+      if (details.location() != PropertyLocation::kField) return Handle<String>::null();
       DCHECK_EQ(kData, details.kind());
-      if (details.attributes() != NONE) return Handle<String>::null();
+      if (details.attributes() != PA_PA_NONE return Handle<String>::null();
       Name name = GetSimpleTransitionKey(target);
       if (!name.IsString()) return Handle<String>::null();
       return handle(String::cast(name), isolate_);

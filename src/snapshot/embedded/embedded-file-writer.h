@@ -89,11 +89,12 @@ class EmbeddedFileWriter : public EmbeddedFileWriterInterface {
   void MaybeWriteEmbeddedFile(const i::EmbeddedData* blob) const {
     if (embedded_src_path_ == nullptr) return;
 
-    FILE* fp = GetFileDescriptorOrDie(embedded_src_path_);
+    // fp is an arm register alias
+    FILE* embedded_fp = GetFileDescriptorOrDie(embedded_src_path_);
 
     std::unique_ptr<PlatformEmbeddedFileWriterBase> writer =
         NewPlatformEmbeddedFileWriter(target_arch_, target_os_);
-    writer->SetFile(fp);
+    writer->SetFile(embedded_fp);
 
     WriteFilePrologue(writer.get());
     WriteExternalFilenames(writer.get());
@@ -101,16 +102,16 @@ class EmbeddedFileWriter : public EmbeddedFileWriterInterface {
     WriteInstructionStreams(writer.get(), blob);
     WriteFileEpilogue(writer.get(), blob);
 
-    fclose(fp);
+    fclose(embedded_fp);
   }
 
   static FILE* GetFileDescriptorOrDie(const char* filename) {
-    FILE* fp = v8::base::OS::FOpen(filename, "wb");
-    if (fp == nullptr) {
+    FILE* file_fp = v8::base::OS::FOpen(filename, "wb");
+    if (file_fp == nullptr) {
       i::PrintF("Unable to open file \"%s\" for writing.\n", filename);
       exit(1);
     }
-    return fp;
+    return file_fp;
   }
 
   void WriteFilePrologue(PlatformEmbeddedFileWriterBase* w) const {

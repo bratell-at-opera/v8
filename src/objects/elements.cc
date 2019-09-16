@@ -1466,7 +1466,7 @@ class DictionaryElementsAccessor
                               Handle<Object> value,
                               PropertyAttributes attributes) {
     NumberDictionary dictionary = NumberDictionary::cast(*store);
-    if (attributes != NONE) object->RequireSlowElements(dictionary);
+    if (attributes != PA_NONE object->RequireSlowElements(dictionary);
     dictionary.ValueAtPut(entry, *value);
     PropertyDetails details = dictionary.DetailsAt(entry);
     details = PropertyDetails(kData, attributes, PropertyCellType::kNoCell,
@@ -1487,7 +1487,7 @@ class DictionaryElementsAccessor
     Handle<NumberDictionary> new_dictionary = NumberDictionary::Add(
         object->GetIsolate(), dictionary, index, value, details);
     new_dictionary->UpdateMaxNumberKey(index, object);
-    if (attributes != NONE) object->RequireSlowElements(*new_dictionary);
+    if (attributes != PA_NONE object->RequireSlowElements(*new_dictionary);
     if (dictionary.is_identical_to(new_dictionary)) return;
     object->set_elements(*new_dictionary);
   }
@@ -2610,7 +2610,7 @@ class FastNonextensibleObjectElementsAccessor
       array->RequireSlowElements(*dictionary);
       JSObject::ApplyAttributesToDictionary(isolate, ReadOnlyRoots(isolate),
                                             dictionary,
-                                            PropertyAttributes::NONE);
+                                            PropertyAttributes::PA_NONE;
     }
 
     // Set length.
@@ -4271,7 +4271,7 @@ class SlowSloppyArgumentsElementsAccessor
     PropertyDetails details(kData, attributes, PropertyCellType::kNoCell);
     Handle<NumberDictionary> new_dictionary =
         NumberDictionary::Add(isolate, dictionary, index, value, details);
-    if (attributes != NONE) object->RequireSlowElements(*new_dictionary);
+    if (attributes != PA_NONE object->RequireSlowElements(*new_dictionary);
     if (*dictionary != *new_dictionary) {
       elements->set_arguments(*new_dictionary);
     }

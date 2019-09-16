@@ -1287,8 +1287,8 @@ Object Slow_ArrayConcat(BuiltinArguments* args, Handle<Object> species,
               if (length == 0) break;
               FixedDoubleArray elements =
                   FixedDoubleArray::cast(array.elements());
-              for (uint32_t i = 0; i < length; i++) {
-                if (elements.is_the_hole(i)) {
+              for (uint32_t k = 0; k < length; k++) {
+                if (elements.is_the_hole(k)) {
                   // TODO(jkummerow/verwaest): We could be a bit more clever
                   // here: Check if there are no elements/getters on the
                   // prototype chain, and if so, allow creation of a holey
@@ -1307,8 +1307,8 @@ Object Slow_ArrayConcat(BuiltinArguments* args, Handle<Object> species,
             case PACKED_SMI_ELEMENTS: {
               Object the_hole = ReadOnlyRoots(isolate).the_hole_value();
               FixedArray elements(FixedArray::cast(array.elements()));
-              for (uint32_t i = 0; i < length; i++) {
-                Object element = elements.get(i);
+              for (uint32_t k = 0; k < length; k++) {
+                Object element = elements.get(k);
                 if (element == the_hole) {
                   failure = true;
                   break;

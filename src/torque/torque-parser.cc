@@ -290,11 +290,11 @@ Expression* MakeCall(IdentifierExpression* callee,
       }
     }
     auto label_name = std::string("__label") + std::to_string(label_id++);
-    auto label_id = MakeNode<Identifier>(label_name);
-    label_id->pos = SourcePosition::Invalid();
-    labels.push_back(label_id);
+    auto inner_label_id = MakeNode<Identifier>(label_name);
+    inner_label_id->pos = SourcePosition::Invalid();
+    labels.push_back(inner_label_id);
     auto* label_block =
-        MakeNode<LabelBlock>(label_id, ParameterList::Empty(), statement);
+        MakeNode<LabelBlock>(inner_label_id, ParameterList::Empty(), statement);
     temp_labels.push_back(label_block);
   }
 
@@ -981,14 +981,14 @@ base::Optional<ParseResult> MakeTypeswitchStatement(
   BlockStatement* current_block = MakeNode<BlockStatement>();
   Statement* result = current_block;
   {
-    CurrentSourcePosition::Scope current_source_position(expression->pos);
+    CurrentSourcePosition::Scope inner_current_source_position(expression->pos);
     current_block->statements.push_back(MakeNode<VarDeclarationStatement>(
         true, MakeNode<Identifier>("__value"), base::nullopt, expression));
   }
 
   TypeExpression* accumulated_types;
   for (size_t i = 0; i < cases.size(); ++i) {
-    CurrentSourcePosition::Scope current_source_position(cases[i].pos);
+    CurrentSourcePosition::Scope inner_current_source_position(cases[i].pos);
     Expression* value =
         MakeNode<IdentifierExpression>(MakeNode<Identifier>("__value"));
     if (i >= 1) {

@@ -290,35 +290,35 @@ void HandleDocumentSymbolRequest(DocumentSymbolRequest request,
   SourceId id =
       SourceFileMap::GetSourceId(request.params().textDocument().uri());
 
-  for (const auto& symbol : LanguageServerData::SymbolsForSourceId(id)) {
+  for (const auto& outer_symbol : LanguageServerData::SymbolsForSourceId(id)) {
     DCHECK(symbol->IsUserDefined());
-    if (symbol->IsMacro()) {
-      Macro* macro = Macro::cast(symbol);
+    if (outer_symbol->IsMacro()) {
+      Macro* macro = Macro::cast(outer_symbol);
       SymbolInformation symbol = response.add_result();
       symbol.set_name(macro->ReadableName());
       symbol.set_kind(SymbolKind::kFunction);
       symbol.location().SetTo(macro->Position());
-    } else if (symbol->IsBuiltin()) {
-      Builtin* builtin = Builtin::cast(symbol);
+    } else if (outer_symbol->IsBuiltin()) {
+      Builtin* builtin = Builtin::cast(outer_symbol);
       SymbolInformation symbol = response.add_result();
       symbol.set_name(builtin->ReadableName());
       symbol.set_kind(SymbolKind::kFunction);
       symbol.location().SetTo(builtin->Position());
-    } else if (symbol->IsGeneric()) {
-      Generic* generic = Generic::cast(symbol);
+    } else if (outer_symbol->IsGeneric()) {
+      Generic* generic = Generic::cast(outer_symbol);
       SymbolInformation symbol = response.add_result();
       symbol.set_name(generic->name());
       symbol.set_kind(SymbolKind::kFunction);
       symbol.location().SetTo(generic->Position());
-    } else if (symbol->IsTypeAlias()) {
-      const Type* type = TypeAlias::cast(symbol)->type();
+    } else if (outer_symbol->IsTypeAlias()) {
+      const Type* type = TypeAlias::cast(outer_symbol)->type();
       SymbolKind kind =
           type->IsClassType() ? SymbolKind::kClass : SymbolKind::kStruct;
 
       SymbolInformation sym = response.add_result();
       sym.set_name(type->ToString());
       sym.set_kind(kind);
-      sym.location().SetTo(symbol->Position());
+      sym.location().SetTo(outer_symbol->Position());
     }
   }
 

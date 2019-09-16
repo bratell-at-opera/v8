@@ -98,7 +98,7 @@ namespace internal {
   T(COMMA, ",", 1)                                                 \
   T(NULLISH, "??", 3)                                              \
   T(OR, "||", 4)                                                   \
-  T(AND, "&&", 5)                                                  \
+  T(TOKEN_AND, "&&", 5)                                                  \
                                                                    \
   /* Unary operators, starting at ADD in BINARY_OP_TOKEN_LIST  */  \
   /* IsUnaryOp() relies on this block of enum values */            \

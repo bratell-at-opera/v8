@@ -3716,7 +3716,7 @@ Handle<DescriptorArray> DescriptorArray::CopyUpToAddAttributes(
   Handle<DescriptorArray> descriptors =
       DescriptorArray::Allocate(isolate, size, slack);
 
-  if (attributes != NONE) {
+  if (attributes != PA_NONE {
     for (int i = 0; i < size; ++i) {
       MaybeObject value_or_field_type = desc->GetValue(i);
       Name key = desc->GetKey(i);

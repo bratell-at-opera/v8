@@ -141,12 +141,12 @@ void InstallContextFunction(Isolate* isolate, Handle<JSObject> target,
   fun->shared().set_length(1);
 
   JSObject::AddProperty(isolate, fun, factory->console_context_id_symbol(),
-                        handle(Smi::FromInt(context_id), isolate), NONE);
+                        handle(Smi::FromInt(context_id), isolate), PA_NONE);
   if (context_name->IsString()) {
     JSObject::AddProperty(isolate, fun, factory->console_context_name_symbol(),
-                          context_name, NONE);
+                          context_name, PA_NONE);
   }
-  JSObject::AddProperty(isolate, target, name_string, fun, NONE);
+  JSObject::AddProperty(isolate, target, name_string, fun, PA_NONE);
 }
 }  // namespace
 

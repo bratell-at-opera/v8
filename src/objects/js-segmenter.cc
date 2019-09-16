@@ -144,9 +144,9 @@ Handle<JSObject> JSSegmenter::ResolvedOptions(
 
   Handle<String> locale(segmenter_holder->locale(), isolate);
   JSObject::AddProperty(isolate, result, factory->locale_string(), locale,
-                        NONE);
+                        PA_NONE;
   JSObject::AddProperty(isolate, result, factory->granularity_string(),
-                        segmenter_holder->GranularityAsString(), NONE);
+                        segmenter_holder->GranularityAsString(), PA_NONE;
   // 5. Return options.
   return result;
 }

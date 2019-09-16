@@ -94,7 +94,7 @@ constexpr uint8_t kDefaultCompilationHint = 0x0;
 constexpr uint8_t kNoCompilationHint = kMaxUInt8;
 
 // Binary encoding of name section kinds.
-enum NameSectionKindCode : uint8_t { kModule = 0, kFunction = 1, kLocal = 2 };
+enum NameSectionKindCode : uint8_t { kModule = 0, kNSKC_Function = 1, kLocal = 2 };
 
 constexpr size_t kWasmPageSize = 0x10000;
 constexpr uint32_t kWasmPageSizeLog2 = 16;

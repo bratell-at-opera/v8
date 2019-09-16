@@ -389,7 +389,7 @@ class JSObject : public TorqueGeneratedJSObject<JSObject, JSReceiver> {
   DefinePropertyOrElementIgnoreAttributes(Handle<JSObject> object,
                                           Handle<Name> name,
                                           Handle<Object> value,
-                                          PropertyAttributes attributes = NONE);
+                                          PropertyAttributes attributes = PA_PA_NONE;
 
   // Adds or reconfigures a property to attributes NONE. It will fail when it
   // cannot.

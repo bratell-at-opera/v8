@@ -79,11 +79,11 @@ Response toProtocolValue(v8::Local<v8::Context> context,
         protocol::ListValue::create();
     uint32_t length = array->Length();
     for (uint32_t i = 0; i < length; i++) {
-      v8::Local<v8::Value> value;
-      if (!array->Get(context, i).ToLocal(&value))
+      v8::Local<v8::Value> inner_value;
+      if (!array->Get(context, i).ToLocal(&inner_value))
         return Response::InternalError();
       std::unique_ptr<protocol::Value> element;
-      Response response = toProtocolValue(context, value, maxDepth, &element);
+      Response response = toProtocolValue(context, inner_value, maxDepth, &element);
       if (!response.isSuccess()) return response;
       inspectorArray->pushValue(std::move(element));
     }
@@ -1269,9 +1269,9 @@ bool ValueMirror::getProperties(v8::Local<v8::Context> context,
     bool configurable = false;
 
     bool isAccessorProperty = false;
-    v8::TryCatch tryCatch(isolate);
+    v8::TryCatch inner_tryCatch(isolate);
     if (!iterator->attributes().To(&attributes)) {
-      exceptionMirror = ValueMirror::create(context, tryCatch.Exception());
+      exceptionMirror = ValueMirror::create(context, inner_tryCatch.Exception());
     } else {
       if (iterator->is_native_accessor()) {
         if (iterator->has_native_getter()) {
@@ -1285,10 +1285,10 @@ bool ValueMirror::getProperties(v8::Local<v8::Context> context,
         configurable = !(attributes & v8::PropertyAttribute::DontDelete);
         isAccessorProperty = getterMirror || setterMirror;
       } else {
-        v8::TryCatch tryCatch(isolate);
+        v8::TryCatch inner_inner_tryCatch(isolate);
         v8::debug::PropertyDescriptor descriptor;
         if (!iterator->descriptor().To(&descriptor)) {
-          exceptionMirror = ValueMirror::create(context, tryCatch.Exception());
+          exceptionMirror = ValueMirror::create(context, inner_inner_tryCatch.Exception());
         } else {
           writable = descriptor.has_writable ? descriptor.writable : false;
           enumerable =
@@ -1317,7 +1317,7 @@ bool ValueMirror::getProperties(v8::Local<v8::Context> context,
                formatAccessorsAsProperties &&
                !doesAttributeHaveObservableSideEffectOnGet(context, object,
                                                            v8Name))) {
-            v8::TryCatch tryCatch(isolate);
+            v8::TryCatch inner_inner_inner_tryCatch(isolate);
             v8::Local<v8::Value> value;
             if (object->Get(context, v8Name).ToLocal(&value)) {
               valueMirror = ValueMirror::create(context, value);
@@ -1479,19 +1479,19 @@ String16 descriptionForNode(v8::Local<v8::Context> context,
     }
   }
   if (!description.length()) {
-    v8::Local<v8::Value> value;
+    v8::Local<v8::Value> inner_value;
     if (!object->Get(context, toV8String(isolate, "constructor"))
-             .ToLocal(&value) ||
-        !value->IsObject()) {
+             .ToLocal(&inner_value) ||
+        !inner_value->IsObject()) {
       return String16();
     }
-    if (!value.As<v8::Object>()
+    if (!inner_value.As<v8::Object>()
              ->Get(context, toV8String(isolate, "name"))
-             .ToLocal(&value) ||
-        !value->IsString()) {
+             .ToLocal(&inner_value) ||
+        !inner_value->IsString()) {
       return String16();
     }
-    description = toProtocolString(isolate, value.As<v8::String>());
+    description = toProtocolString(isolate, inner_value.As<v8::String>());
   }
   v8::Local<v8::Value> nodeType;
   if (!object->Get(context, toV8String(isolate, "nodeType"))

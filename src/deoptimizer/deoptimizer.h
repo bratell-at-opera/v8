@@ -715,7 +715,7 @@ class FrameDescription {
   void SetPc(intptr_t pc) { pc_ = pc; }
 
   intptr_t GetFp() const { return fp_; }
-  void SetFp(intptr_t fp) { fp_ = fp; }
+  void SetFp(intptr_t arg_fp) { fp_ = arg_fp; }
 
   intptr_t GetContext() const { return context_; }
   void SetContext(intptr_t context) { context_ = context; }

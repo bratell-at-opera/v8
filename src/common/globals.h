@@ -794,7 +794,7 @@ enum InlineCacheState {
   // No feedback will be collected.
   NO_FEEDBACK,
   // Has never been executed.
-  UNINITIALIZED,
+  ICS_UNINITIALIZED,
   // Has been executed but monomorphic state has been delayed.
   PREMONOMORPHIC,
   // Has been executed and only one receiver type has been seen.
@@ -814,7 +814,7 @@ inline const char* InlineCacheState2String(InlineCacheState state) {
   switch (state) {
     case NO_FEEDBACK:
       return "NOFEEDBACK";
-    case UNINITIALIZED:
+    case ICS_UNINITIALIZED:
       return "UNINITIALIZED";
     case PREMONOMORPHIC:
       return "PREMONOMORPHIC";
@@ -1160,7 +1160,7 @@ inline bool IsLexicalVariableMode(VariableMode mode) {
   return mode <= VariableMode::kLastLexicalVariableMode;
 }
 
-enum VariableLocation : uint8_t {
+enum class VariableLocation : uint8_t {
   // Before and during variable allocation, a variable whose location is
   // not yet determined.  After allocation, a variable looked up as a
   // property on the global object (and possibly absent).  name() is the

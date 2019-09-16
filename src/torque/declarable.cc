@@ -85,9 +85,9 @@ TypeArgumentInference Generic::InferSpecializationTypes(
 base::Optional<Statement*> Generic::CallableBody() {
   if (auto* decl = TorqueMacroDeclaration::DynamicCast(declaration())) {
     return decl->body;
-  } else if (auto* decl =
+  } else if (auto* builtin_decl =
                  TorqueBuiltinDeclaration::DynamicCast(declaration())) {
-    return decl->body;
+    return builtin_decl->body;
   } else {
     return base::nullopt;
   }

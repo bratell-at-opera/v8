@@ -16,7 +16,7 @@ namespace internal {
 
 // ES6 6.1.7.1
 enum PropertyAttributes {
-  NONE = ::v8::None,
+  PA_NONE = ::v8::None,
   READ_ONLY = ::v8::ReadOnly,
   DONT_ENUM = ::v8::DontEnum,
   DONT_DELETE = ::v8::DontDelete,
@@ -44,7 +44,7 @@ enum PropertyFilter {
   ENUMERABLE_STRINGS = ONLY_ENUMERABLE | SKIP_SYMBOLS,
 };
 // Enable fast comparisons of PropertyAttributes against PropertyFilters.
-STATIC_ASSERT(ALL_PROPERTIES == static_cast<PropertyFilter>(NONE));
+STATIC_ASSERT(ALL_PROPERTIES == static_cast<PropertyFilter>(PA_PA_NONE);
 STATIC_ASSERT(ONLY_WRITABLE == static_cast<PropertyFilter>(READ_ONLY));
 STATIC_ASSERT(ONLY_ENUMERABLE == static_cast<PropertyFilter>(DONT_ENUM));
 STATIC_ASSERT(ONLY_CONFIGURABLE == static_cast<PropertyFilter>(DONT_DELETE));
@@ -68,11 +68,11 @@ class TypeInfo;
 
 // Order of kinds is significant.
 // Must fit in the BitField PropertyDetails::KindField.
-enum PropertyKind { kData = 0, kAccessor = 1 };
+enum class PropertyKind : uint8_t { kData = 0, kAccessor = 1 };
 
 // Order of modes is significant.
 // Must fit in the BitField PropertyDetails::LocationField.
-enum PropertyLocation { kField = 0, kDescriptor = 1 };
+enum class PropertyLocation { kField = 0, kDescriptor = 1 };
 
 // Order of modes is significant.
 // Must fit in the BitField PropertyDetails::ConstnessField.
@@ -209,7 +209,7 @@ class PropertyDetails {
   // Property details for dictionary mode properties/elements.
   PropertyDetails(PropertyKind kind, PropertyAttributes attributes,
                   PropertyCellType cell_type, int dictionary_index = 0) {
-    value_ = KindField::encode(kind) | LocationField::encode(kField) |
+    value_ = KindField::encode(kind) | LocationField::encode(PropertyLocation::kField) |
              AttributesField::encode(attributes) |
              DictionaryStorageField::encode(dictionary_index) |
              PropertyCellTypeField::encode(cell_type);
@@ -228,7 +228,7 @@ class PropertyDetails {
 
   static PropertyDetails Empty(
       PropertyCellType cell_type = PropertyCellType::kNoCell) {
-    return PropertyDetails(kData, NONE, cell_type);
+    return PropertyDetails(PropertyKind::kData, PA_NONE, cell_type);
   }
 
   int pointer() const { return DescriptorPointer::decode(value_); }
@@ -379,7 +379,7 @@ class PropertyDetails {
 // kField location is more general than kDescriptor, kDescriptor generalizes
 // only to itself.
 inline bool IsGeneralizableTo(PropertyLocation a, PropertyLocation b) {
-  return b == kField || a == kDescriptor;
+  return b == PropertyLocation::kField || a == PropertyLocation::kDescriptor;
 }
 
 // PropertyConstness::kMutable constness is more general than

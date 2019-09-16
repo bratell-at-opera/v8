@@ -375,9 +375,9 @@ PropertyAccessInfo AccessInfoFactory::ComputeDataFieldAccessInfo(
                                                                   descriptor));
     if (descriptors_field_type->IsClass()) {
       // Remember the field map, and try to infer a useful type.
-      Handle<Map> map(descriptors_field_type->AsClass(), isolate());
-      field_type = Type::For(MapRef(broker(), map));
-      field_map = MaybeHandle<Map>(map);
+      Handle<Map> inner_map(descriptors_field_type->AsClass(), isolate());
+      field_type = Type::For(MapRef(broker(), inner_map));
+      field_map = MaybeHandle<Map>(inner_map);
     }
   } else {
     CHECK(details_representation.IsTagged());
@@ -511,7 +511,7 @@ PropertyAccessInfo AccessInfoFactory::ComputePropertyAccessInfo(
         if (details.IsReadOnly()) {
           return PropertyAccessInfo::Invalid(zone());
         }
-        if (details.kind() == kData && !holder.is_null()) {
+        if (details.kind() == PropertyKind::kData && !holder.is_null()) {
           // This is a store to a property not found on the receiver but on a
           // prototype. According to ES6 section 9.1.9 [[Set]], we need to
           // create a new data property on the receiver. We can still optimize
@@ -519,8 +519,8 @@ PropertyAccessInfo AccessInfoFactory::ComputePropertyAccessInfo(
           return LookupTransition(receiver_map, name, holder);
         }
       }
-      if (details.location() == kField) {
-        if (details.kind() == kData) {
+      if (details.location() == PropertyLocation::kField) {
+        if (details.kind() == PropertyKind::kData) {
           return ComputeDataFieldAccessInfo(receiver_map, map, holder, number,
                                             access_mode);
         } else {
@@ -761,7 +761,7 @@ PropertyAccessInfo AccessInfoFactory::LookupTransition(
     Handle<Map> map, Handle<Name> name, MaybeHandle<JSObject> holder) const {
   // Check if the {map} has a data transition with the given {name}.
   Map transition =
-      TransitionsAccessor(isolate(), map).SearchTransition(*name, kData, NONE);
+    TransitionsAccessor(isolate(), map).SearchTransition(*name, PropertyKind::kData, PA_NONE);
   if (transition.is_null()) {
     return PropertyAccessInfo::Invalid(zone());
   }
@@ -775,7 +775,7 @@ PropertyAccessInfo AccessInfoFactory::LookupTransition(
     return PropertyAccessInfo::Invalid(zone());
   }
   // TODO(bmeurer): Handle transition to data constant?
-  if (details.location() != kField) {
+  if (details.location() != PropertyLocation::kField) {
     return PropertyAccessInfo::Invalid(zone());
   }
   int const index = details.field_index();
@@ -818,9 +818,9 @@ PropertyAccessInfo AccessInfoFactory::LookupTransition(
           dependencies()->FieldTypeDependencyOffTheRecord(transition_map_ref,
                                                           number));
       // Remember the field map, and try to infer a useful type.
-      Handle<Map> map(descriptors_field_type->AsClass(), isolate());
-      field_type = Type::For(MapRef(broker(), map));
-      field_map = MaybeHandle<Map>(map);
+      Handle<Map> inner_map(descriptors_field_type->AsClass(), isolate());
+      field_type = Type::For(MapRef(broker(), inner_map));
+      field_map = MaybeHandle<Map>(inner_map);
     }
   }
   unrecorded_dependencies.push_back(

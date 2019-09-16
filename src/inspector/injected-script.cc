@@ -522,9 +522,9 @@ std::unique_ptr<protocol::Runtime::RemoteObject> InjectedScript::wrapTable(
         columnMap[property->getName()] = property.get();
       }
       auto filtered = v8::base::make_unique<Array<PropertyPreview>>();
-      for (const String16& column : selectedColumns) {
-        if (columnMap.find(column) == columnMap.end()) continue;
-        filtered->push_back(columnMap[column]->clone());
+      for (const String16& inner_column : selectedColumns) {
+        if (columnMap.find(inner_column) == columnMap.end()) continue;
+        filtered->push_back(columnMap[inner_column]->clone());
       }
       columnPreview->setProperties(std::move(filtered));
     }

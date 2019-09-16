@@ -197,17 +197,17 @@ Handle<JSObject> JSRelativeTimeFormat::ResolvedOptions(
   Handle<JSObject> result = factory->NewJSObject(isolate->object_function());
   Handle<String> locale(format_holder->locale(), isolate);
   JSObject::AddProperty(isolate, result, factory->locale_string(), locale,
-                        NONE);
+                        PA_NONE;
   JSObject::AddProperty(isolate, result, factory->style_string(),
-                        format_holder->StyleAsString(), NONE);
+                        format_holder->StyleAsString(), PA_NONE;
   JSObject::AddProperty(isolate, result, factory->numeric_string(),
-                        format_holder->NumericAsString(), NONE);
+                        format_holder->NumericAsString(), PA_NONE;
   std::string locale_str(format_holder->locale().ToCString().get());
   icu::Locale icu_locale = Intl::CreateICULocale(locale_str);
   std::string numbering_system = Intl::GetNumberingSystem(icu_locale);
   JSObject::AddProperty(
       isolate, result, factory->numberingSystem_string(),
-      factory->NewStringFromAsciiChecked(numbering_system.c_str()), NONE);
+      factory->NewStringFromAsciiChecked(numbering_system.c_str()), PA_NONE;
   return result;
 }
 

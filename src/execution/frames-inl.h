@@ -152,26 +152,26 @@ inline Address StandardFrame::caller_pc() const {
 }
 
 
-inline Address StandardFrame::ComputePCAddress(Address fp) {
-  return fp + StandardFrameConstants::kCallerPCOffset;
+inline Address StandardFrame::ComputePCAddress(Address fp_address) {
+  return fp_address + StandardFrameConstants::kCallerPCOffset;
 }
 
 
-inline Address StandardFrame::ComputeConstantPoolAddress(Address fp) {
-  return fp + StandardFrameConstants::kConstantPoolOffset;
+inline Address StandardFrame::ComputeConstantPoolAddress(Address fp_address) {
+  return fp_address + StandardFrameConstants::kConstantPoolOffset;
 }
 
 
-inline bool StandardFrame::IsArgumentsAdaptorFrame(Address fp) {
+inline bool StandardFrame::IsArgumentsAdaptorFrame(Address fp_address) {
   intptr_t frame_type =
-      base::Memory<intptr_t>(fp + TypedFrameConstants::kFrameTypeOffset);
+      base::Memory<intptr_t>(fp_address + TypedFrameConstants::kFrameTypeOffset);
   return frame_type == StackFrame::TypeToMarker(StackFrame::ARGUMENTS_ADAPTOR);
 }
 
 
-inline bool StandardFrame::IsConstructFrame(Address fp) {
+inline bool StandardFrame::IsConstructFrame(Address fp_address) {
   intptr_t frame_type =
-      base::Memory<intptr_t>(fp + TypedFrameConstants::kFrameTypeOffset);
+      base::Memory<intptr_t>(fp_address + TypedFrameConstants::kFrameTypeOffset);
   return frame_type == StackFrame::TypeToMarker(StackFrame::CONSTRUCT);
 }
 

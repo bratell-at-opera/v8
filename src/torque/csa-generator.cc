@@ -151,8 +151,8 @@ void CSAGenerator::ProcessArgumentsCommon(
     } else {
       std::stringstream s;
       size_t slot_count = LoweredSlotCount(type);
-      VisitResult arg = VisitResult(type, stack->TopRange(slot_count));
-      EmitCSAValue(arg, *stack, s);
+      VisitResult inner_arg = VisitResult(type, stack->TopRange(slot_count));
+      EmitCSAValue(inner_arg, *stack, s);
       args->push_back(s.str());
       stack->PopMany(slot_count);
     }

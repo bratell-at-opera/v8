@@ -1403,7 +1403,7 @@ Handle<JSObject> ConvertToJSObject(Isolate* isolate,
           type_profile, position,
           isolate->factory()->NewJSArrayWithElements(
               ArrayList::Elements(isolate, position_specific_types)),
-          PropertyAttributes::NONE);
+          PropertyAttributes::PA_PA_NONE;
     }
   }
   return type_profile;

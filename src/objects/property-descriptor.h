@@ -106,9 +106,9 @@ class PropertyDescriptor {
 
   PropertyAttributes ToAttributes() {
     return static_cast<PropertyAttributes>(
-        (has_enumerable() && !enumerable() ? DONT_ENUM : NONE) |
-        (has_configurable() && !configurable() ? DONT_DELETE : NONE) |
-        (has_writable() && !writable() ? READ_ONLY : NONE));
+        (has_enumerable() && !enumerable() ? DONT_ENUM : PA_NONE |
+        (has_configurable() && !configurable() ? DONT_DELETE : PA_NONE |
+        (has_writable() && !writable() ? READ_ONLY : PA_NONE);
   }
 
  private:

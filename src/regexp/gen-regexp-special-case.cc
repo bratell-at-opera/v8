@@ -61,9 +61,9 @@ void PrintSpecial(std::ofstream& out) {
       // set which need to be added into either "Special Add" set or "Ignore"
       // set.
       int32_t number_of_upper = 0;
-      for (int32_t i = 0; i < keep_upper.getRangeCount() && i <= 1; i++) {
+      for (int32_t j = 0; j < keep_upper.getRangeCount() && j <= 1; j++) {
         number_of_upper +=
-            keep_upper.getRangeEnd(i) - keep_upper.getRangeStart(i) + 1;
+            keep_upper.getRangeEnd(j) - keep_upper.getRangeStart(j) + 1;
       }
       if (number_of_upper > 1) {
         // Add all non uppercase characters (could be Ll or Mn) to special add

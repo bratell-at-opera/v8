@@ -547,7 +547,7 @@ bool Map::CanBeDeprecated() const {
     if (details.representation().IsSmi()) return true;
     if (details.representation().IsDouble()) return true;
     if (details.representation().IsHeapObject()) return true;
-    if (details.kind() == kData && details.location() == kDescriptor) {
+    if (details.kind() == PropertyKind::kData && details.location() == PropertyLocation::kDescriptor) {
       return true;
     }
   }
@@ -683,7 +683,7 @@ void Map::AppendDescriptor(Isolate* isolate, Descriptor* desc) {
     set_may_have_interesting_symbols(true);
   }
   PropertyDetails details = desc->GetDetails();
-  if (details.location() == kField) {
+  if (details.location() == PropertyLocation::kField) {
     DCHECK_GT(UnusedPropertyFields(), 0);
     AccountAddedPropertyField();
   }

@@ -126,7 +126,7 @@ const StructType* TypeVisitor::ComputeType(
 
   size_t offset = 0;
   for (auto& field : decl->fields) {
-    CurrentSourcePosition::Scope position_activator(
+    CurrentSourcePosition::Scope inner_position_activator(
         field.name_and_type.type->pos);
     const Type* field_type = TypeVisitor::ComputeType(field.name_and_type.type);
     if (field_type->IsConstexpr()) {

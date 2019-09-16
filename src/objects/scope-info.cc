@@ -361,8 +361,8 @@ Handle<ScopeInfo> ScopeInfo::CreateForWithScope(
       SloppyEvalCanExtendVarsField::encode(false) |
       LanguageModeField::encode(LanguageMode::kSloppy) |
       DeclarationScopeField::encode(false) |
-      ReceiverVariableField::encode(NONE) | HasClassBrandField::encode(false) |
-      HasNewTargetField::encode(false) | FunctionVariableField::encode(NONE) |
+      ReceiverVariableField::encode(PA_NONE | HasClassBrandField::encode(false) |
+      HasNewTargetField::encode(false) | FunctionVariableField::encode(PA_NONE |
       IsAsmModuleField::encode(false) | HasSimpleParametersField::encode(true) |
       FunctionKindField::encode(kNormalFunction) |
       HasOuterScopeInfoField::encode(has_outer_scope_info) |
@@ -426,7 +426,7 @@ Handle<ScopeInfo> ScopeInfo::CreateForBootstrapping(Isolate* isolate,
       DeclarationScopeField::encode(true) |
       ReceiverVariableField::encode(is_empty_function ? UNUSED : CONTEXT) |
       HasClassBrandField::encode(false) | HasNewTargetField::encode(false) |
-      FunctionVariableField::encode(is_empty_function ? UNUSED : NONE) |
+      FunctionVariableField::encode(is_empty_function ? UNUSED : PA_NONE |
       HasInferredFunctionNameField::encode(has_inferred_function_name) |
       IsAsmModuleField::encode(false) | HasSimpleParametersField::encode(true) |
       FunctionKindField::encode(FunctionKind::kNormalFunction) |
